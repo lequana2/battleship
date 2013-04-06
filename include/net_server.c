@@ -12,8 +12,8 @@
 #include "bool.h"
 #include "net.h"
 
-void net_error(char *msg) {
-    printf("Error: %s\n", msg);
+void server_error(char *msg) {
+    printf("Server Error: %s\n", msg);
     exit(1);
 }
 
@@ -33,7 +33,7 @@ void start_server(Server *server) {
     fd_set read_fds;
 
     server->socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (server->socket < 0) net_error("opening socket");
+    if (server->socket < 0) server_error("opening socket");
 
     opt = 1;
     setsockopt(server->socket, SOL_SOCKET, SO_REUSEADDR, (const void *)&opt, sizeof(int));
@@ -44,10 +44,10 @@ void start_server(Server *server) {
     server_addr.sin_port = htons(server->port);
 
     if (bind(server->socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        net_error("binding");
+        server_error("binding");
     }
 
-    if (listen(server->socket, MAX_CLIENT) < 0) net_error("listening");
+    if (listen(server->socket, MAX_CLIENT) < 0) server_error("listening");
 
     server->running = TRUE;
     while (server->running) {
@@ -55,11 +55,11 @@ void start_server(Server *server) {
         FD_SET(server->socket, &read_fds);
         FD_SET(0, &read_fds);
 
-        if (select(server->socket + 1, &read_fds, 0, 0, 0) < 0) net_error("selecting");
+        if (select(server->socket + 1, &read_fds, 0, 0, 0) < 0) server_error("selecting");
 
         if (FD_ISSET(server->socket, &read_fds)) {
             child_fd = accept(server->socket, (struct sockaddr *)&client_addr, &client_len);
-            if (child_fd < 0) net_error("accepting");
+            if (child_fd < 0) server_error("accepting");
             server->handler(child_fd);
             close(child_fd);
         }

@@ -1,32 +1,27 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "../common/config.h"
-#include "../common/common.h"
-#include "../common/net.h"
+#include "config.h"
+#include "net.h"
 
-int handle_message_fn(struct sockaddr_in server, char* recv_buffer, int recv_len, char* send_buffer) {
-  printf("RECV: %s\n", recv_buffer);
-  input(send_buffer, "%s", "Message: ");
-
-  if (strcmp(send_buffer, "q") == 0) {
-    return HANDLER_STOP;
-  }
-
-  if (strlen(send_buffer) > 0) {
-    return HANDLER_SEND;
-  }
-
-  return HANDLER_SKIP;
+void handler(char *msg) {
+    printf("Echo from server: %s\n", msg);
 }
 
-int handle_setup_fn(struct sockaddr_in server, int port) {
-  printf("Connected to server - , port: %d.\n", port);
-}
+int main() {
+    Client *client = create_client();
+    client->port = PORT;
+    client->handler = &handler;
+    connect_client(client, "localhost");
 
-int main(int argc, char* argv[]) {
-  return def_client("127.0.0.1", DEFAULT_PORT,
-                    &handle_setup_fn,
-                    &handle_message_fn);
+    char buff[BUFFER_SIZE];
+    printf("Please enter msg: ");
+    bzero(buff, BUFFER_SIZE);
+    fgets(buff, BUFFER_SIZE, stdin);
+
+    client_send(client, buff);
+
+    return 0;
 }

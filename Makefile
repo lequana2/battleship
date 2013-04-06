@@ -1,8 +1,8 @@
 
-LDFLAGS=-Linclude
+LDFLAGS=-Linclude -lc
 CFLAGS=-g -Wall -Iinclude
 
-all: clean client server
+all: client server
 
 client: client/client.o include/net_client.o
 	$(CC) $(LDFLAGS) $^ -o build/$@
