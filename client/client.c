@@ -6,16 +6,26 @@
 
 #include "config.h"
 #include "net.h"
+#include "protocol.h"
 
 void handler(char *msg) {
     printf("Echo from server: %s\n", msg);
 }
 
-void client_send(Client *client, char *msg) {
+void client_send(Client *client, char *m) {
     int n;
     char buff[BUFFER_SIZE];
 
-    n = write(client->socket, msg, strlen(msg));
+    /* n = write(client->socket, msg, strlen(msg)); */
+    /* if (n < 0) client_error("writing to socket"); */
+
+    Message msg;
+    msg.type = TEST;
+
+    TestMessage payload;
+    strncpy(payload.message, m, strlen(m));
+    msg.test_payload = payload;
+    n = write(client->socket, &msg, sizeof(msg));
     if (n < 0) client_error("writing to socket");
 
     bzero(buff, BUFFER_SIZE);

@@ -8,18 +8,23 @@
 
 #include "config.h"
 #include "net.h"
+#include "protocol.h"
 
-void handler(int socket) {
-    char buff[BUFFER_SIZE];
+void handler(int client) {
+    char buff[BUFFER_SIZE] = "Hello, World!";
     int n;
 
-    bzero(buff, BUFFER_SIZE);
-    n = read(socket, buff, BUFFER_SIZE);
-    if (n < 0) server_error("reading from socket");
+    /* bzero(buff, BUFFER_SIZE); */
+    /* n = read(client, buff, BUFFER_SIZE); */
+    /* if (n < 0) server_error("reading from socket"); */
 
-    printf("%s\n", buff);
+    Message msg;
+    n = read(client, &msg, sizeof(msg));
 
-    n = write(socket, buff, strlen(buff));
+    printf("%d\n", msg.type);
+    printf("%s\n", msg.test_payload.message);
+
+    n = write(client, buff, strlen(buff));
     if (n < 0) server_error("writing to socket");
 }
 

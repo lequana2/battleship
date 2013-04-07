@@ -4,25 +4,31 @@
 
 #define PORT 5000
 #define MAX_USERNAME_LEN 12
+#define BUFFER_SIZE 1024
 
 typedef enum MessageType_ {
-  AUTH, JOIN, TURN_BEGIN, TURN_END
+    TEST
 } MessageType;
 
+typedef struct TestMessage_ {
+    char message[BUFFER_SIZE];
+} TestMessage;
+
 typedef struct AuthenticationMessage_ {
-  char username[MAX_USERNAME_LEN];
+    char username[MAX_USERNAME_LEN];
 } AuthenticationMessage;
 
 typedef struct MoveMessage_ {
-  char username[MAX_USERNAME_LEN];
+    char username[MAX_USERNAME_LEN];
 } MoveMessage;
 
 typedef struct Message_ {
-  MessageType type;
-  union {
-    AuthenticationMessage authentication_payload;
-    MoveMessage move_payload;
-  };
+    MessageType type;
+    union {
+        TestMessage test_payload;
+        AuthenticationMessage authentication_payload;
+        MoveMessage move_payload;
+    };
 } Message;
 
 Message new_authentication_message(char* username);

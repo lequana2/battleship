@@ -3,7 +3,6 @@
 #define _COMMON_NET_
 
 #define MAX_CLIENT 32
-#define BUFFER_SIZE 1024
 
 typedef struct Server_ {
   int socket;
