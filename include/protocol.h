@@ -13,12 +13,12 @@ typedef enum MessageType_ {
     // Client
     MSG_CONNECT, MSG_DISCONNECT,
     MSG_BEGIN, MSG_END,
-    MSG_INVITE, MSG_REPLY,
+    MSG_INVITE, MSG_REPLY_ACCEPT, MSG_REPLY_DENY,
     MSG_TURN, MSG_MOVE,
     MSG_LIST_PLAYERS,
 
     // Server
-    MSG_ERROR,
+    MSG_SUCCESS, MSG_ERROR,
     MSG_PLAYERS,
 } MessageType;
 

@@ -10,26 +10,56 @@
 #include "net.h"
 #include "protocol.h"
 
+Message handle_connect_msg(Message msg) {
+    Message res;
+
+    return res;
+}
+
 void handler(int client) {
-    char buff[BUFFER_SIZE] = "Hello, World!";
     int n;
+    Message req, res;
 
-    /* bzero(buff, BUFFER_SIZE); */
-    /* n = read(client, buff, BUFFER_SIZE); */
-    /* if (n < 0) server_error("reading from socket"); */
+    n = read(client, &req, sizeof(req));
+    if (n < 0) server_error("reading from socket");
 
-    Message msg;
-    n = read(client, &msg, sizeof(msg));
+    switch (req.type) {
+        case MSG_CONNECT:
+            // TODO: add the name to player list, respond with MSG_SUCCESS
+            res = handle_connect_msg(req);
+            break;
+        case MSG_LIST_PLAYERS:
+            // TODO: respond with MSG_PLAYERS
+            break;
+        case MSG_INVITE:
+            // TODO: send MSG_INVITE to the other player, respond with MSG_SUCCESS/MSG_ERROR
+            break;
+        case MSG_REPLY_ACCEPT:
+            // TODO: send MSG_BEGIN to both the players, send MSG_TURN to one of them
+            break;
+        case MSG_REPLY_DENY:
+            // TODO: send MSG_ERROR to the original player
+            break;
+        case MSG_MOVE:
+            // TODO: send MSG_MOVE to the other player, respond with MSG_SUCCESS
+            break;
+        case MSG_END:
+            // TODO: send MSG_END to both players
+            break;
+        case MSG_DISCONNECT:
+            // TODO: delete from player list, broad cast to all other players with MSG_DISCONNECT, respond with MSG_SUCCESS
+            break;
+        case MSG_TEXT:
+            break;
+    }
 
-    printf("%d\n", msg.type);
-    printf("%s\n", msg.test_payload.message);
-
-    n = write(client, buff, strlen(buff));
+    n = write(client, &res, sizeof(res));
     if (n < 0) server_error("writing to socket");
 }
 
-int main(int argc, char* argv[]) {
+int main() {
     Server *server = create_server();
+
     server->port = PORT;
     server->handler = &handler;
     server_start(server);
