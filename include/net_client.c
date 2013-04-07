@@ -24,7 +24,7 @@ Client* create_client() {
     return client;
 }
 
-void connect_client(Client *client, char *hostname) {
+void client_connect(Client *client, char *hostname) {
     struct sockaddr_in server_addr;
     struct hostent *server;
 
@@ -46,21 +46,7 @@ void connect_client(Client *client, char *hostname) {
     client->running = TRUE;
 }
 
-void client_send(Client *client, char *msg) {
-    int n;
-    char buff[BUFFER_SIZE];
-
-    n = write(client->socket, msg, strlen(msg));
-    if (n < 0) client_error("writing to socket");
-
-    bzero(buff, BUFFER_SIZE);
-    n = read(client->socket, buff, BUFFER_SIZE);
-    if (n < 0) client_error("reading to socket");
-
-    client->handler(buff);
-}
-
-void disconnect_client(Client *client) {
+void client_disconnect(Client *client) {
     client->running = FALSE;
     close(client->socket);
     free(client);

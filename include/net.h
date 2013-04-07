@@ -20,14 +20,13 @@ typedef struct Client_ {
 } Client;
 
 Server *create_server();
-void start_server(Server *server);
-void stop_server(Server *server);
+void server_start(Server *server);
+void server_stop(Server *server);
 void server_error(char *msg);
 
 Client *create_client();
-void connect_client(Client *client, char *hostname);
-void disconnect_client(Client *client);
-void client_send(Client *client, char *msg);
+void client_connect(Client *client, char *hostname);
+void client_disconnect(Client *client);
 void client_error(char *msg);
 
 #endif

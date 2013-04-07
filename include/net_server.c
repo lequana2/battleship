@@ -24,7 +24,7 @@ Server* create_server() {
     return server;
 }
 
-void start_server(Server *server) {
+void server_start(Server *server) {
     int child_fd, opt;
 
     struct sockaddr_in server_addr;
@@ -69,6 +69,6 @@ void start_server(Server *server) {
     free(server);
 }
 
-void stop_server(Server *server) {
+void server_stop(Server *server) {
     server->running = FALSE;
 }

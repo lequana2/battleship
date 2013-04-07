@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     Server *server = create_server();
     server->port = PORT;
     server->handler = &handler;
-    start_server(server);
+    server_start(server);
 
     return 0;
 }
