@@ -17,11 +17,11 @@ void client_send(Client *client, char *m) {
     char buff[BUFFER_SIZE];
 
     Message msg;
-    msg.type = TEST;
+    msg.type = MSG_TEXT;
 
     TextMessage payload;
-    strncpy(payload.message, m, strlen(m));
-    msg.test_payload = payload;
+    strncpy(payload.content, m, strlen(m));
+    msg.text = payload;
     n = write(client->socket, &msg, sizeof(msg));
     if (n < 0) client_error("writing to socket");
 
